@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">InterpolatorDiagram</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="interpolators">
+        <item>"AccelerateDecelerate"</item>
+        <item>"Accelerate"</item>
+        <item>"Anticipate"</item>
+        <item>"AnticipateOvershoot"</item>
+        <item>"Bounce"</item>
+        <item>"Cycle"</item>
+        <item>"Decelerate"</item>
+        <item>"Linear"</item>
+        <item>"Overshoot"</item>
+    </string-array>
+</resources>
