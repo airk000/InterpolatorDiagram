@@ -1,3 +1,10 @@
 <resources>
     <dimen name="drawer_width">220dp</dimen>
+
+    <dimen name="axis_padding">2dp</dimen>
+    <dimen name="axis_width">3dp</dimen>
+    <dimen name="arc_width">2dp</dimen>
+
+    <dimen name="common_margin">16dp</dimen>
+    <dimen name="common_margin_small">8dp</dimen>
 </resources>

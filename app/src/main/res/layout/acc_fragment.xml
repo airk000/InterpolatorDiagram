@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/common_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Factor"
+            android:layout_marginLeft="@dimen/common_margin_small"
+            android:layout_marginRight="@dimen/common_margin_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/factor"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <com.airk.interpolatordiagram.app.widget.AccDiagramView
+        android:id="@+id/diagram"
+        android:layout_marginTop="@dimen/common_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
