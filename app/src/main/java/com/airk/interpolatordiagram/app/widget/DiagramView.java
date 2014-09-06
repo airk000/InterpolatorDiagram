@@ -12,17 +12,16 @@ import android.view.animation.Interpolator;
 
 import com.airk.interpolatordiagram.app.R;
 
-import java.util.ArrayList;
-
 /**
- * Created by Administrator on 2014/9/6.
+ * Created by Kevin on 2014/9/6.
+ *
+ * Diagram for Any Interpolator
  */
 public class DiagramView extends View {
     private Paint mPaint;
     private Paint mLinePaint;
     private Paint mTextPaint;
     private Interpolator mInterpolator;
-    private ArrayList<Float> mArrayY;
 
     public DiagramView(Context context) {
         super(context);
@@ -55,8 +54,7 @@ public class DiagramView extends View {
         mTextPaint.setTextSize(65f);
         mTextPaint.setColor(Color.RED);
         mTextPaint.setStyle(Paint.Style.FILL);
-
-        mArrayY = new ArrayList<Float>();
+        mTextPaint.setAntiAlias(true);
     }
 
     public Interpolator setInterpolator(Interpolator interpolator) {
