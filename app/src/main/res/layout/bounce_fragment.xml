@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.airk.interpolatordiagram.app.widget.DiagramView
-        android:id="@+id/diagram"
+    <com.airk.interpolatordiagram.app.widget.BounceDiagramView
         android:layout_margin="@dimen/common_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
