@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
 import com.airk.interpolatordiagram.app.util.LogWrapper;
@@ -23,11 +24,13 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @InjectView(R.id.content_frame)
     FrameLayout mContent;
+    @InjectView(R.id.guide)
+    TextView mGuide;
     @InjectView(R.id.list)
     ListView mList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -112,6 +115,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         } else if (mDrawerLayout.isDrawerOpen(mList)) {
                 mActionBar.setTitle(mArray[mSelectedInterpolator]);
         }
+        mGuide.setOnClickListener(this);
     }
 
     private void slidingContent(float slideOffset) {
@@ -163,6 +167,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.guide) {
+            mDrawerLayout.openDrawer(mList);
         }
     }
 }
