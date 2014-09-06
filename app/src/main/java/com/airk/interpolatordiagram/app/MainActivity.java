@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
+import com.airk.interpolatordiagram.app.util.LogWrapper;
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,12 +26,15 @@ import butterknife.InjectView;
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    @InjectView(R.id.content_frame)
+    FrameLayout mContent;
     @InjectView(R.id.list)
     ListView mList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
     private String[] mArray;
     private int mSelectedInterpolator = -1;
+    private int mDrawerWidth;
 
     private final String SELECTED_INTERPOLATOR_KEY = "selected";
 
@@ -45,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mActionBar.setHomeButtonEnabled(true);
 
         mArray = getResources().getStringArray(R.array.interpolators);
+        mDrawerWidth = getResources().getDimensionPixelSize(R.dimen.drawer_width);
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(SELECTED_INTERPOLATOR_KEY)) {
             mSelectedInterpolator = savedInstanceState.getInt(SELECTED_INTERPOLATOR_KEY);
@@ -87,6 +94,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     mActionBar.setTitle(mArray[mSelectedInterpolator]);
                 }
             }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                slidingContent(slideOffset);
+            }
         };
         mList.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
@@ -95,9 +108,16 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         if (mSelectedInterpolator == -1 && !mDrawerLayout.isDrawerOpen(mList)) {
             mDrawerLayout.openDrawer(mList);
+            slidingContent(1f);
         } else if (mDrawerLayout.isDrawerOpen(mList)) {
                 mActionBar.setTitle(mArray[mSelectedInterpolator]);
         }
+    }
+
+    private void slidingContent(float slideOffset) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mContent, "translationX",
+                slideOffset * mDrawerWidth);
+        animator.setDuration(0).start();
     }
 
     @Override

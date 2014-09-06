@@ -42,7 +42,8 @@ public class AccDecDiagramView extends View {
         mArcPaint = new Paint();
         mArcPaint.setColor(Color.argb(255, 3, 169, 244));
         mArcPaint.setStyle(Paint.Style.STROKE);
-//        mArcPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.arc_width));
+        mArcPaint.setAntiAlias(true);
+        mArcPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.arc_width));
 
         mPolator = new AccelerateDecelerateInterpolator();
     }

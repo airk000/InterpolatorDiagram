@@ -43,6 +43,8 @@ public class AccDiagramView extends View {
         mArcPaint = new Paint();
         mArcPaint.setColor(Color.argb(255, 3, 169, 244));
         mArcPaint.setStyle(Paint.Style.STROKE);
+        mArcPaint.setAntiAlias(true);
+        mArcPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.arc_width));
         mPolator = new AccelerateInterpolator(1f);
         mFactor = 1f;
     }
