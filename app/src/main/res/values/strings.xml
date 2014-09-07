@@ -3,6 +3,8 @@
 
     <string name="app_name">InterpolatorDiagram</string>
     <string name="action_rate">Rate me</string>
+    <string name="action_about">About</string>
+    <string name="about_string">Android has give us some animation interpolator, but when we use them, we always forgot what them look like, this app just help you with this.</string>
     <string-array name="interpolators">
         <item>"AccelerateDecelerate"</item>
         <item>"Accelerate"</item>

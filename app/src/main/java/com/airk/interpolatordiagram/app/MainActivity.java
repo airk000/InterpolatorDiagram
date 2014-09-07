@@ -13,10 +13,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -24,8 +26,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
+import com.airk.interpolatordiagram.app.fragment.AboutFragmentDialog;
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -153,6 +157,28 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         return super.onCreateOptionsMenu(menu);
     }
 
+    // Overflow中显示Menu item的icon
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        if(featureId == Window.FEATURE_ACTION_BAR && menu != null){
+            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
+                try{
+                    Method m = menu.getClass().getDeclaredMethod(
+                            "setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                }
+                catch(NoSuchMethodException e){
+                    e.printStackTrace();
+                }
+                catch(Exception e){
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return super.onMenuOpened(featureId, menu);
+    }
+
     // 添加这个以使NavigationDrawer也能够响应ActionBar上的点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -168,6 +194,8 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 intent.setData(Uri.parse("https://market.android.com/details?id=com.airk.interpolatordiagram.app"));
             }
             startActivity(intent);
+        } else if (item.getItemId() == R.id.action_about) {
+            new AboutFragmentDialog().show(getSupportFragmentManager(), "about");
         }
         return super.onOptionsItemSelected(item);
     }
