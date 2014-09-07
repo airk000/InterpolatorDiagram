@@ -1,7 +1,11 @@
 package com.airk.interpolatordiagram.app;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -9,6 +13,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +25,8 @@ import android.widget.TextView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
 import com.nineoldandroids.animation.ObjectAnimator;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -138,11 +146,28 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mDrawerToggle.syncState();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     // 添加这个以使NavigationDrawer也能够响应ActionBar上的点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
+        }
+        if (item.getItemId() == R.id.action_rate) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=com.airk.interpolatordiagram.app"));
+            PackageManager pm = getPackageManager();
+            List<ResolveInfo> list = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (list.size() <= 0) {
+                intent.setData(Uri.parse("https://market.android.com/details?id=com.airk.interpolatordiagram.app"));
+            }
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

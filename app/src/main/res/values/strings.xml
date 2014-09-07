@@ -2,8 +2,7 @@
 <resources>
 
     <string name="app_name">InterpolatorDiagram</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_rate">Rate me</string>
     <string-array name="interpolators">
         <item>"AccelerateDecelerate"</item>
         <item>"Accelerate"</item>
