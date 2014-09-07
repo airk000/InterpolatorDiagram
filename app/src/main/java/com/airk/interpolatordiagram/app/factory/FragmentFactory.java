@@ -7,9 +7,15 @@ import com.airk.interpolatordiagram.app.fragment.AccDiagramFragment;
 import com.airk.interpolatordiagram.app.fragment.AntiDiagramFragment;
 import com.airk.interpolatordiagram.app.fragment.AntiOverDiagramFragment;
 import com.airk.interpolatordiagram.app.fragment.BounceDiagramFragment;
+import com.airk.interpolatordiagram.app.fragment.CycleDiagramFragment;
+import com.airk.interpolatordiagram.app.fragment.DecDiagramFragment;
+import com.airk.interpolatordiagram.app.fragment.LinearDiagramFragment;
+import com.airk.interpolatordiagram.app.fragment.OvershotDiagramFragment;
 
 /**
  * Created by kevin on 14-9-5.
+ *
+ * Fragment factory for navigation drawer
  */
 public class FragmentFactory {
     private static FragmentFactory mFactory;
@@ -19,6 +25,10 @@ public class FragmentFactory {
     private Fragment mAntiFragment;
     private Fragment mAntiOverFragment;
     private Fragment mBounceFragment;
+    private Fragment mCycleFragment;
+    private Fragment mDecFragment;
+    private Fragment mLinearFragment;
+    private Fragment mOverFragment;
 
     private FragmentFactory() {}
 
@@ -56,6 +66,26 @@ public class FragmentFactory {
                     mBounceFragment = new BounceDiagramFragment();
                 }
                 return mBounceFragment;
+            case 5:
+                if (mCycleFragment == null) {
+                    mCycleFragment = new CycleDiagramFragment();
+                }
+                return mCycleFragment;
+            case 6:
+                if (mDecFragment == null) {
+                    mDecFragment = new DecDiagramFragment();
+                }
+                return mDecFragment;
+            case 7:
+                if (mLinearFragment == null) {
+                    mLinearFragment = new LinearDiagramFragment();
+                }
+                return mLinearFragment;
+            case 8:
+                if (mOverFragment == null) {
+                    mOverFragment = new OvershotDiagramFragment();
+                }
+                return mOverFragment;
             default:
                 break;
         }

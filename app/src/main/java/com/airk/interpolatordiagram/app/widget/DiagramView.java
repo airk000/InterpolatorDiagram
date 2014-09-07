@@ -59,6 +59,7 @@ public class DiagramView extends View {
 
     public Interpolator setInterpolator(Interpolator interpolator) {
         mInterpolator = interpolator;
+        invalidate();
         return mInterpolator;
     }
 
@@ -68,6 +69,10 @@ public class DiagramView extends View {
         canvas.drawColor(Color.TRANSPARENT);
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
+        if (mInterpolator == null) {
+            super.onDraw(canvas);
+            return;
+        }
         float zeroY;
         float maxY;
         float max;

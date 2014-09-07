@@ -9,13 +9,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -23,11 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
-import com.airk.interpolatordiagram.app.util.LogWrapper;
 import com.nineoldandroids.animation.ObjectAnimator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

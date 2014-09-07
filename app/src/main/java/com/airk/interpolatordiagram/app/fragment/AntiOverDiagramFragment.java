@@ -9,10 +9,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.EditText;
 
 import com.airk.interpolatordiagram.app.R;
-import com.airk.interpolatordiagram.app.widget.AntiOverDiagramView;
+import com.airk.interpolatordiagram.app.widget.DiagramView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -28,7 +30,8 @@ public class AntiOverDiagramFragment extends Fragment {
     @InjectView(R.id.extra)
     EditText mExtra;
     @InjectView(R.id.diagram)
-    AntiOverDiagramView mDiagram;
+    DiagramView mDiagram;
+    private Interpolator mInterpolator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,7 +40,6 @@ public class AntiOverDiagramFragment extends Fragment {
         mTension.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -47,13 +49,11 @@ public class AntiOverDiagramFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         mExtra.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -63,9 +63,10 @@ public class AntiOverDiagramFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
+        mInterpolator = new AnticipateOvershootInterpolator();
+        mDiagram.setInterpolator(mInterpolator);
         return v;
     }
 
@@ -79,7 +80,9 @@ public class AntiOverDiagramFragment extends Fragment {
         if (!TextUtils.isEmpty(mExtra.getText())) {
             extra = Float.valueOf(mExtra.getText().toString());
         }
-        mDiagram.setTensionAndExtra(tension, extra);
+        mInterpolator = null;
+        mInterpolator = new AnticipateOvershootInterpolator(tension, extra);
+        mDiagram.setInterpolator(mInterpolator);
     }
 
 }
