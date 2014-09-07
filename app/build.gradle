@@ -16,6 +16,14 @@ android {
     compileSdkVersion 19
     buildToolsVersion "20.0.0"
 
+    signingConfigs {
+        androidConfig {
+            storeFile file('android.keystore')
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'android'
+        }
+    }
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
@@ -24,16 +32,19 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.androidConfig
+            zipAlign true
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
-    // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.android.support:appcompat-v7:20.0.0'
     compile 'com.jakewharton:butterknife:5.1.2'
