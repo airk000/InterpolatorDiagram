@@ -14,8 +14,7 @@ repositories {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "20.0.0"
-
+    buildToolsVersion '20.0.0'
     signingConfigs {
         androidConfig {
             storeFile file('android.keystore')
@@ -28,7 +27,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
     buildTypes {
         release {

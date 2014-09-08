@@ -13,9 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -36,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+    private final String SELECTED_INTERPOLATOR_KEY = "selected";
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @InjectView(R.id.content_frame)
@@ -49,8 +48,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String[] mArray;
     private int mSelectedInterpolator = -1;
     private int mDrawerWidth;
-
-    private final String SELECTED_INTERPOLATOR_KEY = "selected";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             mDrawerLayout.openDrawer(mList);
             slidingContent(1f);
         } else if (mDrawerLayout.isDrawerOpen(mList)) {
-                mActionBar.setTitle(mArray[mSelectedInterpolator]);
+            mActionBar.setTitle(mArray[mSelectedInterpolator]);
         }
         mGuide.setOnClickListener(this);
     }
@@ -160,18 +157,16 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     // Overflow中显示Menu item的icon
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
-        if(featureId == Window.FEATURE_ACTION_BAR && menu != null){
-            if(menu.getClass().getSimpleName().equals("MenuBuilder")){
-                try{
+        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+                try {
                     Method m = menu.getClass().getDeclaredMethod(
                             "setOptionalIconsVisible", Boolean.TYPE);
                     m.setAccessible(true);
                     m.invoke(menu, true);
-                }
-                catch(NoSuchMethodException e){
+                } catch (NoSuchMethodException e) {
                     e.printStackTrace();
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
