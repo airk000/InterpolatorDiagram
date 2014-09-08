@@ -6,10 +6,7 @@ interpolators' digram.
 
 Play
 ===
-<a href="https://play.google.com/store/apps/details?id=com.airk.interpolatordiagram.app">
-  <img alt="Get it on Google Play"
-       src="/images/brand/en_generic_rgb_wo_45.png" />
-</a>
+[![get it](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.airk.interpolatordiagram.app)
 
 Screenshots
 ===
