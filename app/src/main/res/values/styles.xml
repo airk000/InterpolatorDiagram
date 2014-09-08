@@ -1,8 +1,26 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/AppActionBarStyle</item>
+        <item name="actionBarStyle">@style/AppActionBarStyle</item>
+
+        <item name="android:actionOverflowButtonStyle">@style/AppActionBarOverflow</item>
+        <item name="actionOverflowButtonStyle">@style/AppActionBarOverflow</item>
     </style>
 
+    <style name="AppActionBarStyle" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/app_white</item>
+
+        <item name="android:titleTextStyle">@style/AppActionBarTitleText</item>
+        <item name="titleTextStyle">@style/AppActionBarTitleText</item>
+    </style>
+
+    <style name="AppActionBarOverflow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_sysbar_menu_24dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AppActionBarTitleText" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/app_black</item>
+    </style>
 </resources>

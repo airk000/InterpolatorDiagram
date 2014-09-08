@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setIcon(R.drawable.ic_drawer_indicator);
         mActionBar.setHomeButtonEnabled(true);
 
         mArray = getResources().getStringArray(R.array.interpolators);
@@ -75,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
-                R.drawable.ic_navigation_drawer,
+                android.R.color.transparent,
                 android.R.string.ok,
                 android.R.string.cancel) {
             /**
@@ -89,6 +90,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 mActionBar.setTitle(getString(R.string.app_name));
+                invalidateOptionsMenu();
             }
 
             /**
@@ -104,6 +106,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 if (mSelectedInterpolator != -1) {
                     mActionBar.setTitle(mArray[mSelectedInterpolator]);
                 }
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -150,6 +153,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.clear();
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mList)) {
+            return true;
+        }
         getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
