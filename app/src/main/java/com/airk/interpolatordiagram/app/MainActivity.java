@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -36,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -45,6 +47,9 @@ import android.widget.TextView;
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
 import com.airk.interpolatordiagram.app.fragment.AboutFragmentDialog;
 import com.airk.interpolatordiagram.app.fragment.BaseFragment;
+import com.airk.interpolatordiagram.app.widget.DiagramView;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.lang.reflect.Method;
@@ -69,6 +74,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String[] mArray;
     private int mSelectedInterpolator = -1;
     private int mDrawerWidth;
+    private View mPlayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +186,31 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         getMenuInflater().inflate(R.menu.main, menu);
         if (mSelectedInterpolator != -1) {
             menu.findItem(R.id.action_play).setVisible(true);
+            View v = MenuItemCompat.getActionView(menu.findItem(R.id.action_play));
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotation", 0, 360);
+                    animator.setDuration(500).setRepeatCount(ObjectAnimator.INFINITE);
+                    animator.setInterpolator(new LinearInterpolator());
+                    animator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            super.onAnimationCancel(animation);
+                            ObjectAnimator a = ObjectAnimator.ofFloat(v, "rotation", 0);
+                            a.setDuration(1).start();
+                        }
+                    });
+                    animator.start();
+                    Fragment fragment = FragmentFactory.getInstance().getInterpolator(mSelectedInterpolator);
+                    ((BaseFragment) fragment).getDiagramView().playBalls(new DiagramView.AnimationListener() {
+                        @Override
+                        public void onAnimateFinished() {
+                            animator.cancel();
+                        }
+                    });
+                }
+            });
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -221,9 +252,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             startActivity(intent);
         } else if (item.getItemId() == R.id.action_about) {
             new AboutFragmentDialog().show(getSupportFragmentManager(), "about");
-        } else if (item.getItemId() == R.id.action_play) {
-            Fragment fragment = FragmentFactory.getInstance().getInterpolator(mSelectedInterpolator);
-            ((BaseFragment) fragment).getDiagramView().playBalls();
         }
         return super.onOptionsItemSelected(item);
     }

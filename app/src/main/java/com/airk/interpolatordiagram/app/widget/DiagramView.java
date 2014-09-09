@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -57,6 +58,10 @@ public class DiagramView extends View {
     private Path mDiagramPath;
 
     private boolean mDataInited = false;
+    public interface AnimationListener {
+        public void onAnimateFinished();
+    }
+    private AnimationListener mListener;
 
     private Circle mLeftCircle;
     private Circle mWithCircle;
@@ -224,6 +229,7 @@ public class DiagramView extends View {
                 mAnimBalls = false;
                 mAnimX = Float.MIN_VALUE;
                 mAnimY = Float.MIN_VALUE;
+                mListener.onAnimateFinished();
             } else {
                 mAnimX += mLeftCircle.radius / 4;
             }
@@ -232,9 +238,10 @@ public class DiagramView extends View {
         super.onDraw(canvas);
     }
 
-    public void playBalls() {
+    public void playBalls(@NonNull AnimationListener listener) {
         mAnimBalls = true;
         invalidate();
+        mListener = listener;
     }
 
     private float realY(float y) {
