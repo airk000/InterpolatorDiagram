@@ -24,7 +24,7 @@
     android:clickable="true"
     android:src="@drawable/ic_action_av_play"
     android:scaleType="centerInside"
-    android:layout_width="48dp"
-    android:layout_height="48dp">
+    android:layout_width="?attr/actionBarSize"
+    android:layout_height="?attr/actionBarSize">
 
 </ImageView>

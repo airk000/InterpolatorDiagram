@@ -189,7 +189,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    final ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotation", 0, 360);
+                    final ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotationX", 0, 360);
                     animator.setDuration(800).setRepeatCount(ObjectAnimator.INFINITE);
                     animator.setInterpolator(new LinearInterpolator());
                     animator.addListener(new AnimatorListenerAdapter() {
@@ -208,7 +208,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                         @Override
                         public void onAnimationCancel(Animator animation) {
                             super.onAnimationCancel(animation);
-                            ObjectAnimator a = ObjectAnimator.ofFloat(v, "rotation", 0);
+                            ObjectAnimator a = ObjectAnimator.ofFloat(v, "rotationX", 0);
                             a.setDuration(1).start();
                             v.setClickable(true);
                         }
