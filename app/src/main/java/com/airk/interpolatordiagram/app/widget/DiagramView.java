@@ -31,6 +31,8 @@ import android.view.animation.Interpolator;
 
 import com.airk.interpolatordiagram.app.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Kevin on 2014/9/6.
  * <p/>
@@ -40,7 +42,48 @@ public class DiagramView extends View {
     private Paint mPaint;
     private Paint mLinePaint;
     private Paint mTextPaint;
+    private Paint mBallPaint;
     private Interpolator mInterpolator;
+    private boolean mAnimBalls = false;
+    private float mAnimX = Float.MIN_VALUE;
+    private float mAnimY = Float.MIN_VALUE;
+
+    private float mZeroY;
+    private float mMaxY;
+    private float mMAX;
+    private float mTopYFactor = 1f;
+    private float mBottomYFactor = 0f;
+    private ArrayList<StandardLine> mImportY;
+    private Path mDiagramPath;
+
+    private boolean mDataInited = false;
+
+    private Circle mLeftCircle;
+    private Circle mWithCircle;
+
+    private class Circle {
+        float cx;
+        float cy;
+        float radius;
+
+        public Circle() {
+            cx = 0f;
+            cy = mZeroY;
+            radius = 25;
+        }
+    }
+
+    private class StandardLine {
+        float lx;
+        float ly;
+        float factor;
+
+        public StandardLine(float x, float y, float f) {
+            lx = x;
+            ly = y;
+            factor = f;
+        }
+    }
 
     public DiagramView(Context context) {
         super(context);
@@ -74,6 +117,12 @@ public class DiagramView extends View {
         mTextPaint.setColor(Color.RED);
         mTextPaint.setStyle(Paint.Style.FILL);
         mTextPaint.setAntiAlias(true);
+
+        mBallPaint = new Paint();
+        mBallPaint.setColor(Color.argb(255, 233, 30, 99));
+        mBallPaint.setStyle(Paint.Style.FILL);
+        mBallPaint.setAntiAlias(true);
+        mBallPaint.setStrokeWidth(getResources().getDimensionPixelSize(R.dimen.arc_width));
     }
 
     public Interpolator setInterpolator(Interpolator interpolator) {
@@ -84,50 +133,103 @@ public class DiagramView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // Clear canvas
-        canvas.drawColor(Color.TRANSPARENT);
-        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-
         if (mInterpolator == null) {
             super.onDraw(canvas);
             return;
         }
-        float zeroY;
-        float maxY;
-        float max;
-        float topFactor = 1f;
-        float bottomFactor = 0f;
+
         int width = getWidth();
-        for (int i = 0; i < width; i++) {
-            float factorX = (float) i / width;
-            float factorY = mInterpolator.getInterpolation(factorX);
-            if (factorY > 1f) {
-                if (factorY > topFactor) {
-                    topFactor = factorY;
-                }
-            } else if (factorY < 0f) {
-                if (factorY < bottomFactor) {
-                    bottomFactor = factorY;
+        if (!mDataInited) {
+            // calculate smallest and biggest factor
+            for (int i = 0; i < width; i++) {
+                float factorX = (float) i / width;
+                float factorY = mInterpolator.getInterpolation(factorX);
+                if (factorY > 1f) {
+                    if (factorY > mTopYFactor) {
+                        mTopYFactor = factorY;
+                    }
+                } else if (factorY < 0f) {
+                    if (factorY < mBottomYFactor) {
+                        mBottomYFactor = factorY;
+                    }
                 }
             }
-        }
-        max = (float) getHeight() / (topFactor - bottomFactor);
-        zeroY = (0f - bottomFactor) * max;
-        maxY = getHeight() - (topFactor - 1f) * max;
-        drawLineY(canvas, maxY, true);
-        drawLineY(canvas, zeroY, false);
+            mMAX = (float) getHeight() / (mTopYFactor - mBottomYFactor);
+            mZeroY = (0f - mBottomYFactor) * mMAX;
+            mMaxY = getHeight() - (mTopYFactor - 1f) * mMAX;
 
-        for (int i = 0; i < width; i++) {
-            float factorX = (float) i / width;
-            float factorY = mInterpolator.getInterpolation(factorX);
-            float y = max * factorY;
-            canvas.drawPoint(i, realY(zeroY + y), mPaint);
+            mImportY = new ArrayList<StandardLine>();
+            mDiagramPath = new Path();
+            mDiagramPath.moveTo(0, mZeroY);
+            // draw real point
+            for (int i = 0; i < width; i++) {
+                float factorX = (float) i / width;
+                float factorY = mInterpolator.getInterpolation(factorX);
+                float y = mMAX * factorY;
+                mDiagramPath.lineTo(i, realY(mZeroY + y));
+            }
+            // draw lines
+            for (int i = 1; i < 10; i++) {
+                float factor = (float) i / 10;
+                float factorY = mInterpolator.getInterpolation(factor);
+                float y = mZeroY + mMAX * factorY;
+                mImportY.add(new StandardLine(factor * width, y, factor));
+            }
+            mDataInited = true;
+        }
+        // Clear canvas
+        canvas.drawColor(Color.TRANSPARENT);
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        // draw all thing except the two ball
+        drawLineY(canvas, mZeroY, false);
+        drawLineY(canvas, mMaxY, true);
+        for (StandardLine s : mImportY) {
+            drawLineY(canvas, s.lx, s.ly, s.factor);
+        }
+        canvas.drawPath(mDiagramPath, mPaint);
+        playBalls();
+
+        if (mAnimBalls) {
+            if (mAnimX == Float.MIN_VALUE && mAnimY == Float.MIN_VALUE) {
+                mAnimX = 0f;
+                mAnimY = mZeroY;
+                mLeftCircle = new Circle();
+                mWithCircle = new Circle();
+                mLeftCircle.cx = mLeftCircle.radius;
+            }
+            if (mAnimX >= width) {
+                mAnimBalls = false;
+            } else {
+                mAnimX += mLeftCircle.radius / 4;
+            }
+            float factor = mAnimX / width;
+            float factorY = mInterpolator.getInterpolation(factor);
+            mAnimY = mZeroY + mMAX * factorY;
+            mLeftCircle.cy = mAnimY;
+            mWithCircle.cx = mAnimX;
+            mWithCircle.cy = mAnimY;
+            canvas.drawCircle(mLeftCircle.cx, mLeftCircle.cy, mLeftCircle.radius, mBallPaint);
+            canvas.drawCircle(mWithCircle.cx, mWithCircle.cy, mWithCircle.radius, mBallPaint);
+            postInvalidateDelayed(13);
         }
         super.onDraw(canvas);
     }
 
+    private void playBalls() {
+        mAnimBalls = true;
+        invalidate();
+    }
+
     private float realY(float y) {
-        return getHeight() - y;
+        return y;
+    }
+
+    private void drawLineY(Canvas canvas, float x, float y, float factor) {
+        canvas.drawLine(0, realY(y), getWidth(), realY(y), mLinePaint);
+        Path path = new Path();
+        path.moveTo(x, realY(y));
+        path.lineTo(getWidth(), realY(y));
+        canvas.drawTextOnPath("" + factor, path, 0, -5, mTextPaint);
     }
 
     private void drawLineY(Canvas canvas, float y, boolean max) {
