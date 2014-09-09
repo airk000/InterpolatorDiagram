@@ -127,8 +127,24 @@ public class DiagramView extends View {
 
     public Interpolator setInterpolator(Interpolator interpolator) {
         mInterpolator = interpolator;
+        mDataInited = false;
+        mAnimBalls = false;
         invalidate();
         return mInterpolator;
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        mDataInited = false;
+        invalidate();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mDataInited = false;
+        invalidate();
     }
 
     @Override
@@ -187,7 +203,6 @@ public class DiagramView extends View {
             drawLineY(canvas, s.lx, s.ly, s.factor);
         }
         canvas.drawPath(mDiagramPath, mPaint);
-        playBalls();
 
         if (mAnimBalls) {
             if (mAnimX == Float.MIN_VALUE && mAnimY == Float.MIN_VALUE) {
@@ -197,11 +212,6 @@ public class DiagramView extends View {
                 mWithCircle = new Circle();
                 mLeftCircle.cx = mLeftCircle.radius;
             }
-            if (mAnimX >= width) {
-                mAnimBalls = false;
-            } else {
-                mAnimX += mLeftCircle.radius / 4;
-            }
             float factor = mAnimX / width;
             float factorY = mInterpolator.getInterpolation(factor);
             mAnimY = mZeroY + mMAX * factorY;
@@ -210,12 +220,19 @@ public class DiagramView extends View {
             mWithCircle.cy = mAnimY;
             canvas.drawCircle(mLeftCircle.cx, mLeftCircle.cy, mLeftCircle.radius, mBallPaint);
             canvas.drawCircle(mWithCircle.cx, mWithCircle.cy, mWithCircle.radius, mBallPaint);
-            postInvalidateDelayed(13);
+            if (mAnimX >= width) {
+                mAnimBalls = false;
+                mAnimX = Float.MIN_VALUE;
+                mAnimY = Float.MIN_VALUE;
+            } else {
+                mAnimX += mLeftCircle.radius / 4;
+            }
+            invalidate();
         }
         super.onDraw(canvas);
     }
 
-    private void playBalls() {
+    public void playBalls() {
         mAnimBalls = true;
         invalidate();
     }
@@ -237,7 +254,7 @@ public class DiagramView extends View {
         Path path = new Path();
         path.moveTo(0, realY(y));
         path.lineTo(getWidth(), realY(y));
-        canvas.drawTextOnPath(max ? "MAX" : "0", path, 0, max ? 50 : -5, mTextPaint);
+        canvas.drawTextOnPath(max ? "MAX" : "0", path, 0, max ? -5 : 50, mTextPaint);
     }
 
 }

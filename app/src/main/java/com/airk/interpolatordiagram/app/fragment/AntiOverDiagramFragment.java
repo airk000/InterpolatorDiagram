@@ -43,7 +43,7 @@ import butterknife.InjectView;
  * <p/>
  * AntiOver
  */
-public class AntiOverDiagramFragment extends Fragment {
+public class AntiOverDiagramFragment extends BaseFragment {
     @InjectView(R.id.tension)
     EditText mTension;
     @InjectView(R.id.extra)
@@ -104,4 +104,8 @@ public class AntiOverDiagramFragment extends Fragment {
         mDiagram.setInterpolator(mInterpolator);
     }
 
+    @Override
+    public DiagramView getDiagramView() {
+        return mDiagram;
+    }
 }

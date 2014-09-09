@@ -43,7 +43,7 @@ import butterknife.InjectView;
  * <p/>
  * Overshot
  */
-public class OvershotDiagramFragment extends Fragment implements TextWatcher {
+public class OvershotDiagramFragment extends BaseFragment implements TextWatcher {
     @InjectView(R.id.tension)
     EditText mTension;
     @InjectView(R.id.diagram)
@@ -76,5 +76,10 @@ public class OvershotDiagramFragment extends Fragment implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    @Override
+    public DiagramView getDiagramView() {
+        return mDiagram;
     }
 }

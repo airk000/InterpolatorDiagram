@@ -38,7 +38,7 @@ import butterknife.InjectView;
  * <p/>
  * Bounce
  */
-public class BounceDiagramFragment extends Fragment {
+public class BounceDiagramFragment extends BaseFragment {
     @InjectView(R.id.diagram)
     DiagramView mDiagram;
 
@@ -48,5 +48,10 @@ public class BounceDiagramFragment extends Fragment {
         ButterKnife.inject(this, v);
         mDiagram.setInterpolator(new BounceInterpolator());
         return v;
+    }
+
+    @Override
+    public DiagramView getDiagramView() {
+        return mDiagram;
     }
 }

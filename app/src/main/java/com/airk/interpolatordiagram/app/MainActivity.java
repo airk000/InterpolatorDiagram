@@ -44,6 +44,7 @@ import android.widget.TextView;
 
 import com.airk.interpolatordiagram.app.factory.FragmentFactory;
 import com.airk.interpolatordiagram.app.fragment.AboutFragmentDialog;
+import com.airk.interpolatordiagram.app.fragment.BaseFragment;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.lang.reflect.Method;
@@ -52,7 +53,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener,
+        View.OnClickListener {
     private final String SELECTED_INTERPOLATOR_KEY = "selected";
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -176,6 +178,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             return true;
         }
         getMenuInflater().inflate(R.menu.main, menu);
+        if (mSelectedInterpolator != -1) {
+            menu.findItem(R.id.action_play).setVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -216,6 +221,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             startActivity(intent);
         } else if (item.getItemId() == R.id.action_about) {
             new AboutFragmentDialog().show(getSupportFragmentManager(), "about");
+        } else if (item.getItemId() == R.id.action_play) {
+            Fragment fragment = FragmentFactory.getInstance().getInterpolator(mSelectedInterpolator);
+            ((BaseFragment) fragment).getDiagramView().playBalls();
         }
         return super.onOptionsItemSelected(item);
     }

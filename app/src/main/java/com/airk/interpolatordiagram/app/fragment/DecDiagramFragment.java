@@ -43,7 +43,7 @@ import butterknife.InjectView;
  * <p/>
  * Dec
  */
-public class DecDiagramFragment extends Fragment implements TextWatcher {
+public class DecDiagramFragment extends BaseFragment implements TextWatcher {
     @InjectView(R.id.factor)
     EditText mFactor;
     @InjectView(R.id.diagram)
@@ -79,5 +79,10 @@ public class DecDiagramFragment extends Fragment implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    @Override
+    public DiagramView getDiagramView() {
+        return mDiagram;
     }
 }

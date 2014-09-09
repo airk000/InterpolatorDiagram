@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.airk.interpolatordiagram.app.MainActivity">
     <item
+        android:id="@+id/action_play"
+        android:icon="@drawable/ic_action_av_play"
+        android:orderInCategory="10"
+        android:title="Play"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_about"
         android:icon="@drawable/ic_action_action_about"
         android:orderInCategory="50"

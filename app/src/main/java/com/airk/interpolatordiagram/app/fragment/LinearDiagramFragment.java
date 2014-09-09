@@ -38,7 +38,7 @@ import butterknife.InjectView;
  * <p/>
  * AccDec
  */
-public class LinearDiagramFragment extends Fragment {
+public class LinearDiagramFragment extends BaseFragment {
     @InjectView(R.id.diagram)
     DiagramView mDiagramView;
 
@@ -48,5 +48,10 @@ public class LinearDiagramFragment extends Fragment {
         ButterKnife.inject(this, v);
         mDiagramView.setInterpolator(new LinearInterpolator());
         return v;
+    }
+
+    @Override
+    public DiagramView getDiagramView() {
+        return mDiagramView;
     }
 }
