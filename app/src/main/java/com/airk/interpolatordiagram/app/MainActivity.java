@@ -74,7 +74,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     private String[] mArray;
     private int mSelectedInterpolator = -1;
     private int mDrawerWidth;
-    private View mPlayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,14 +190,27 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 @Override
                 public void onClick(final View v) {
                     final ObjectAnimator animator = ObjectAnimator.ofFloat(v, "rotation", 0, 360);
-                    animator.setDuration(500).setRepeatCount(ObjectAnimator.INFINITE);
+                    animator.setDuration(800).setRepeatCount(ObjectAnimator.INFINITE);
                     animator.setInterpolator(new LinearInterpolator());
                     animator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+                            v.setClickable(false);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            v.setClickable(true);
+                        }
+
                         @Override
                         public void onAnimationCancel(Animator animation) {
                             super.onAnimationCancel(animation);
                             ObjectAnimator a = ObjectAnimator.ofFloat(v, "rotation", 0);
                             a.setDuration(1).start();
+                            v.setClickable(true);
                         }
                     });
                     animator.start();
