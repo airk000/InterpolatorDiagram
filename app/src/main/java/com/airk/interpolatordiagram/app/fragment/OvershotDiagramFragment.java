@@ -66,10 +66,14 @@ public class OvershotDiagramFragment extends BaseFragment implements TextWatcher
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (!TextUtils.isEmpty(s)) {
-            float tension = Float.valueOf(s.toString());
-            mInterpolator = null;
-            mInterpolator = new OvershootInterpolator(tension);
-            mDiagram.setInterpolator(mInterpolator);
+            try {
+                float tension = Float.valueOf(s.toString());
+                mInterpolator = null;
+                mInterpolator = new OvershootInterpolator(tension);
+                mDiagram.setInterpolator(mInterpolator);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
     }
 
