@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/airk000/InterpolatorDiagram.svg?branch=master)](https://travis-ci.org/airk000/InterpolatorDiagram)
+
 InterpolatorDiagram
 ===
 
